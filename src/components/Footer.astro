@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets"; 
+import "../style/global.css"; 
+import Logo from "../../public/Sena_A.webp";
+import Logo_Google from "../../public/google-brands-solid.svg";
+import Logo_ig from "../../public/instagram-brands-solid.svg";
+import Logo_wa from "../../public/whatsapp-brands-solid.svg";
+import Logo_github from "../../public/github-brands-solid.svg";
+---
+
+<footer class="flex flex-col lg:flex-row justify-between items-center p-5 mt-10 lg:mt-0 lg:h-96">
+    <div class="flex flex-col justify-center items-center mb-8 lg:mb-0">
+        <div class="w-[120px] mb-5">
+            <Image class="object-cover rounded-full" src={Logo} alt="Logo"/>
+        </div>
+        <h1 class="font-semibold text-2xl text-center">Sena Corporation</h1>
+        <h1 class="font-medium text-lg text-center">All Rights Reserved</h1>
+    </div>
+    <div class="flex flex-col text-center mb-8 lg:mb-0">
+        <h1 class="font-bold text-2xl mb-4">Menu</h1>
+        <ul class="flex flex-col justify-between items-center gap-2">
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#Portofolio">Portofolio</a></li>
+            <li><a href="#Contact">Contact</a></li>
+        </ul>
+    </div>
+    <div class="flex flex-col justify-center items-center">
+        <h1 class="font-semibold text-2xl mb-5">Kunjungi Saya</h1>
+        <div class="flex gap-5 justify-center items-center">
+            <div class="w-[40px]">
+                <a href="#"><Image class="object-cover" src={Logo_Google} alt="Logo Google"/></a>
+            </div>
+            <div class="w-[40px]">
+                <a href="#"><Image class="object-cover" src={Logo_github} alt="Logo Github"/></a>
+            </div>
+            <div class="w-[40px]">
+                <a href="#"><Image class="object-cover" src={Logo_ig} alt="Logo Instagram"/></a>
+            </div>
+            <div class="w-[40px]">
+                <a href="#"><Image class="object-cover" src={Logo_wa} alt="Logo Whatsapp"/></a>
+            </div>
+        </div>
+    </div>
+</footer>

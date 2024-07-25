@@ -1,0 +1,146 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+import { Image } from "astro:assets";
+
+import Hero from "../../public/Astronaut.png";
+import Profile from "../../public/Akhdan.jpeg";
+import AstroJS from "../../public/astroJS.png";
+import Nextjs from "../../public/nextJS.png";
+import Svelte from "../../public/svelte.png";
+import Golang from "../../public/golang.png";
+import Node_js from "../../public/node_js.png";
+import Figma from "../../public/figma.png";
+
+import Ecommerce from "../../public/projekEcommercce.webp";
+import Jurusan from "../../public/projekWebJurusan.webp";
+import Blog from "../../public/projekBlog.webp";
+import CRUD from "../../public/projekDosamurid.webp";
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Portfolio Sena</title>
+	</head>
+	<body>
+		<Header/>
+		<main class="min-h-[100vh] flex flex-col justify-center items-center bg-gradient-to-l from-pink-700 via-purple-700 to-indigo-700 pb-36">
+
+			<section id="" class="flex flex-col lg:flex-row justify-between items-center lg:min-h-[100vh] gap-8 lg:gap-32 p-4 lg:p-0 my-24">
+				<div class="text-center lg:text-left">
+					<h1 class="text-4xl lg:text-6xl font-bold mb-3">Hello There, this is Me Sena.</h1>
+					<p class="text-lg">I created this web using Astro to learn what Astro JS is.</p>
+				</div>
+				<div class="flex justify-center lg:justify-end">
+					<div class="h-[20rem] lg:h-[30rem]">
+						<Image class={"object-cover"} height={500} src={Hero} alt={"Hero Photo"}/>
+					</div>
+				</div>
+			</section>
+
+			<section id="about" class="flex flex-col justify-between items-center gap-16 lg:gap-56 min-h-[100vh] p-4 lg:p-0">
+				<div class="flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-20">
+					<div class="flex flex-col justify-between items-center rounded-lg gap-5 bg-white p-4 lg:p-0">
+						<div class="w-64 lg:w-80">
+							<Image class={"object-cover rounded-t-lg"} src={Profile} alt={"Profile"}/>
+						</div>
+						<div class="text-center">
+							<h1 class="text-2xl font-semibold">Sena Auliya</h1>
+							<p class="text-md font-medium">This is ME Sena</p>
+						</div>
+					</div>
+					<div class="w-full lg:w-[50rem] text-center lg:text-left flex flex-col gap-4">
+						<span class="text-2xl lg:text-4xl font-semibold">I am a Fullstack Developer using JavaScript as my programming language.</span>
+						<p class="text-lg lg:text-2xl font-medium">I am Sena Auliya. I live in Jepara, Central Java, Indonesia. I study at SMK Negeri 1 Bangsri. I am in Class 12 and will graduate in a year.</p>
+					</div>
+				</div>
+				<div class="flex flex-col lg:flex-row justify-between gap-8 lg:gap-36 items-center">
+					<div class="flex flex-col w-full lg:w-96 h-auto lg:h-[500px] text-center bg-white gap-8 lg:gap-20 justify-between items-center p-4 lg:py-5 lg:px-10 rounded-xl">
+						<h1 class="text-2xl font-semibold">FrontEnd</h1>
+						<p class="text-lg font-medium">I am an expert in using the Next.js framework as a FrontEnd. I also use Svelte and have an interest in Astro JS. I built this website with Astro JS.</p>
+						<div class="flex gap-4 lg:gap-12">
+							<div class="w-[40px] lg:w-[60px]">
+								<Image src={AstroJS} alt={"Astro JS"}/>
+							</div>
+							<div class="w-[40px] lg:w-[60px]">
+								<Image src={Nextjs} alt={"Next JS"}/>
+							</div>
+							<div class="w-[40px] lg:w-[60px]">
+								<Image src={Svelte} alt={"Svelte"}/>
+							</div>
+						</div>
+					</div>
+					<div class="flex flex-col w-full lg:w-96 h-auto lg:h-[500px] text-center bg-white gap-8 lg:gap-20 justify-between items-center p-4 lg:py-5 lg:px-10 rounded-xl">
+						<h1 class="text-2xl font-semibold">Backend</h1>
+						<p class="text-lg font-medium">I am an expert in using Node.js as a Backend. I am also learning Golang.</p>
+						<div class="flex gap-4 lg:gap-12">
+							<div class="w-[40px] lg:w-[60px]">
+								<Image src={Node_js} alt={"Node JS"}/>
+							</div>
+							<div class="w-[40px] lg:w-[70px]">
+								<Image src={Golang} alt={"Golang"}/>
+							</div>
+						</div>
+					</div>
+					<div class="flex flex-col w-full lg:w-96 text-center h-auto lg:h-[500px] bg-white gap-8 lg:gap-20 justify-between items-center p-4 lg:py-5 lg:px-10 rounded-xl">
+						<h1 class="text-2xl font-semibold">Design</h1>
+						<p class="text-lg font-medium">I am also a web designer. Since I am a full-stack developer, I learn some basic web design to create better websites. I use Figma for my web designs.</p>
+						<div class="flex gap-4 lg:gap-12">
+							<div class="w-[60px] lg:w-[120px]">
+								<Image src={Figma} alt={"Figma"}/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="flex flex-col lg:flex-row justify-between items-center gap-8 lg:gap-14">
+					<div class="flex flex-col w-full lg:w-96 text-center h-auto lg:h-[500px] bg-white gap-4 lg:gap-7 items-center p-4 lg:py-5 rounded-xl">
+						<div class="w-full">
+							<Image class={"object-cover"} src={Blog} alt={"Blog"}/>
+						</div>
+						<div>
+							<h1 class="text-xl lg:text-2xl px-4 lg:px-10 font-semibold mb-2">Web Blog</h1>
+							<p class="text-md lg:text-lg px-4 lg:px-10 font-medium">I made this project for my school project using Adonis JS.</p>	
+						</div>
+						<a class="bg-indigo-700 px-4 py-2 rounded-lg text-white hover:bg-indigo-900 hover:text-purple-300" href="https://github.com/SenaAuliya/BeliBersama">See project</a>
+					</div>
+					<div class="flex flex-col w-full lg:w-96 text-center h-auto lg:h-[500px] bg-white gap-4 lg:gap-7 items-center p-4 lg:py-5 rounded-xl">
+						<div class="w-full">
+							<Image class={"object-cover"} src={Jurusan} alt={"Jurusan"}/>
+						</div>
+						<div>
+							<h1 class="text-xl lg:text-2xl px-4 lg:px-10 font-semibold mb-2">Web School</h1>
+							<p class="text-md lg:text-lg px-4 lg:px-10 font-medium">I made this project for my school using Next.js, Sanity, and Firebase.</p>	
+						</div>
+						<a class="bg-indigo-700 px-4 py-2 rounded-lg text-white hover:bg-indigo-900 hover:text-purple-300" href="https://github.com/SenaAuliya/BeliBersama">See project</a>
+					</div>
+					<div class="flex flex-col w-full lg:w-96 text-center h-auto lg:h-[500px] bg-white gap-4 lg:gap-7 items-center p-4 lg:py-5 rounded-xl">
+						<div class="w-full">
+							<Image class={"object-cover"} src={Ecommerce} alt={"Ecommerce"}/>
+						</div>
+						<div>
+							<h1 class="text-xl lg:text-2xl px-4 lg:px-10 font-semibold mb-2">Web Ecommerce</h1>
+							<p class="text-md lg:text-lg px-4 lg:px-10 font-medium">I made this project using the Next.js and Sanity.io frameworks and Firebase. I made this project for my school project.</p>	
+						</div>
+						<a class="bg-indigo-700 px-4 py-2 rounded-lg text-white hover:bg-indigo-900 hover:text-purple-300" href="https://github.com/SenaAuliya/BeliBersama">See project</a>
+					</div>
+					<div class="flex flex-col w-full lg:w-96 text-center h-auto lg:h-[500px] bg-white gap-4 lg:gap-7 items-center p-4 lg:py-5 rounded-xl">
+						<div class="w-full">
+							<Image class={"object-cover"} src={CRUD} alt={"CRUD"}/>
+						</div>
+						<div>
+							<h1 class="text-xl lg:text-2xl px-4 lg:px-10 font-semibold mb-2">Web Ecommerce</h1>
+							<p class="text-md lg:text-lg px-4 lg:px-10 font-medium">This is my first project using the Laravel framework. I made this because there was a guest teacher to provide material about Laravel.</p>	
+						</div>
+						<a class="bg-indigo-700 px-4 py-2 rounded-lg text-white hover:bg-indigo-900 hover:text-purple-300" href="https://github.com/SenaAuliya/BeliBersama">See project</a>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer/>
+	</body>
+</html>

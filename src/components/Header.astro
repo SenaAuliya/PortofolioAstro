@@ -1,0 +1,40 @@
+---
+import Logo from "../../public/Sena_A.webp"
+import { Image } from "astro:assets";
+import "../../src/style/global.css"
+---
+
+<header class="flex flex-wrap justify-between items-center p-5 shadow-sm">
+    <div class="lg:w-[100px] w-[60px]">
+        <Image class="object-cover rounded-full" src={Logo} alt="Logo" />
+    </div>
+    <nav class="hidden md:flex justify-between items-center gap-3">
+        <li><a href="#">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#Portofolio">Portofolio</a></li>
+        <li><a href="#Contact">Contact</a></li>
+    </nav>
+    <div>
+        <button class="hidden lg:flex p-4 bg-violet-500 hover:bg-violet-700 text-white rounded-lg">Subscribe</button>
+    </div>
+    <button id="menu-btn" class="md:hidden block p-2 text-gray-500 focus:outline-none focus:text-gray-900">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+    <div id="menu" class="hidden w-full lg:hidden sm:flex flex-col items-center mt-4 space-y-2">
+        <li><a href="#" class="block">Home</a></li>
+        <li><a href="#about" class="block">About</a></li>
+        <li><a href="#Portofolio" class="block">Portofolio</a></li>
+        <li><a href="#Contact" class="block">Contact</a></li>
+    </div>
+</header>
+
+<script>
+    const menuBtn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+
+    menuBtn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+    });
+</script>
