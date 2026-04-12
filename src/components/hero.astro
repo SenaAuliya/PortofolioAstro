@@ -1,0 +1,219 @@
+---
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
+
+// Query untuk mengambil data stats
+// 1. Menghitung total proyek secara otomatis
+// 2. Mengambil data dari dokumen 'about' atau 'experience' untuk tahun dan klien
+const STATS_QUERY = `{
+  "totalProjects": count(*[_type == "project"]),
+  "experienceData": *[_type == "experience"][0] {
+    yearsOfExp,
+    totalClients
+  }
+}`;
+
+const stats = await sanityClient.fetch(STATS_QUERY);
+
+// Ambil data dengan fallback (nilai cadangan jika data di Sanity kosong)
+const yearsExp = stats.experienceData?.yearsOfExp || "0";
+const totalProjects = stats.totalProjects || "0";
+const totalClients = stats.experienceData?.totalClients || "0";
+---
+
+<style>
+  .hero {
+    padding: 7rem 4rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+  .hero-tag::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-name {
+    font-size: clamp(4rem, 10vw, 8.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.35s;
+  }
+  .hero-name .line2 {
+    -webkit-text-stroke: 1.5px var(--white);
+    color: transparent;
+  }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 4rem;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.5s;
+  }
+
+  .hero-desc {
+    max-width: 380px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+  }
+  .stat-item {
+    text-align: right;
+  }
+  .stat-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    bottom: -2rem;
+    right: 5rem;
+    font-size: 18vw;
+    font-weight: 800;
+    color: #161616;
+    letter-spacing: -0.05em;
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+    z-index: 10; 
+    pointer-events: none; 
+    mix-blend-mode: lighten; 
+    opacity: 0.8;
+  }
+  @media (max-width: 1024px) {
+    .hero {
+      padding: 6rem 2.5rem 4rem;
+    }
+    .hero-name {
+      font-size: 12vw;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 5rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-name {
+      font-size: clamp(3.5rem, 15vw, 6rem);
+      margin-bottom: 2rem;
+    }
+
+    .hero-bottom {
+      flex-direction: column; /* Tumpuk deskripsi dan stat secara vertikal */
+      align-items: flex-start; /* Rata kiri */
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .hero-desc {
+      max-width: 100%; /* Deskripsi mengambil lebar penuh */
+      font-size: 0.8rem;
+    }
+
+    .hero-stats {
+      width: 100%;
+      justify-content:间-between; /* Sebarkan stats secara merata */
+      gap: 1rem;
+    }
+
+    .stat-item {
+      text-align: left; /* Rata kiri untuk mobile agar lebih natural */
+    }
+
+    .stat-num {
+      font-size: 2rem;
+    }
+
+    .hero-bg-text {
+      font-size: 25vw; /* Perbesar sedikit di mobile agar tetap bold */
+      bottom: -1rem;
+      right: -1rem;
+      opacity: 0.4; /* Kurangi opacity agar tidak menabrak teks deskripsi */
+    }
+  }
+
+  /* Untuk HP Kecil */
+  @media (max-width: 480px) {
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Bagi jadi 2 kolom */
+      gap: 2rem;
+    }
+    
+    .hero-tag {
+      font-size: 0.65rem;
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-tag">Fullstack Developer</div>
+  <h1 class="hero-name">
+    <div>Sena</div>
+    <div class="line2">Auliya.</div>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      I build fast, accessible, and visually sharp digital experiences.
+      Passionate about clean code and bold interfaces that leave an impression.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">{yearsExp}+</div>
+        <div class="stat-label">Years Exp.</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-num">{totalProjects}+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+
+      <div class="stat-item">
+        <div class="stat-num">{totalClients}+</div>
+        <div class="stat-label">Clients</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bg-text" aria-hidden="true">DEV</div>
+</section>

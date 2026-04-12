@@ -1,0 +1,200 @@
+---
+import Logo from "../assets/SenaAuliya.png";
+import { Image } from "astro:assets";
+---
+
+<style>
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--black);
+    z-index: 100;
+  }
+
+  /* PERBAIKAN: Hapus titik ganda */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    height: 40px;
+  }
+
+  .nav-logo img {
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 100%;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-links a:hover {
+    color: var(--white);
+  }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--white);
+    color: var(--white);
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover {
+    background: var(--white);
+    color: var(--black);
+  }
+
+  /* ===================== MOBILE TOGGLE (HAMBURGER) ===================== */
+  .mobile-toggle {
+    display: none; /* Sembunyi di desktop */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001; /* Di atas nav-links */
+    padding: 0;
+  }
+
+  .mobile-toggle .bar {
+    width: 24px;
+    height: 2px;
+    background-color: var(--white);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      padding: 1rem 1.5rem;
+    }
+
+    .mobile-toggle {
+      display: flex; /* MUNCULKAN DI MOBILE */
+    }
+
+    .desktop-only {
+      display: none;
+    }
+
+    .nav-links {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background: var(--black);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+      transform: translateY(-100%);
+      transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+      z-index: 1000;
+    }
+
+    .nav-links.active {
+      transform: translateY(0);
+    }
+
+    .nav-links a {
+      font-size: 1.5rem;
+    }
+
+    /* ANIMASI SILANG PRESISI */
+    .mobile-toggle.active .bar:nth-child(1) {
+      transform: translateY(4px) rotate(45deg);
+    }
+
+    .mobile-toggle.active .bar:nth-child(2) {
+      transform: translateY(-4px) rotate(-45deg);
+    }
+  }
+</style>
+
+<nav>
+  <div class="nav-logo">
+    <Image src={Logo} alt="logo" height={40} />
+  </div>
+
+  <button class="mobile-toggle" aria-label="Menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li class="mobile-only">
+      <a href="mailto:senaauliya7@gmail.com" class="nav-cta">Hire Me</a>
+    </li>
+  </ul>
+
+  <a href="mailto:senaauliya7@gmail.com" class="nav-cta desktop-only">Hire Me</a>
+</nav>
+
+<script>
+  const mobileToggle = document.querySelector(".mobile-toggle");
+  const navLinksList = document.querySelector(".nav-links");
+  const links = document.querySelectorAll(".nav-links a");
+
+  if (mobileToggle && navLinksList) {
+    mobileToggle.addEventListener("click", () => {
+      mobileToggle.classList.toggle("active");
+      navLinksList.classList.toggle("active");
+      document.body.style.overflow = navLinksList.classList.contains("active") ? "hidden" : "";
+    });
+
+    links.forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileToggle.classList.remove("active");
+        navLinksList.classList.remove("active");
+        document.body.style.overflow = "";
+      });
+    });
+  }
+
+  // Scroll Active Logic
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-links a");
+  
+  window.addEventListener("scroll", () => {
+    let current = "";
+    sections.forEach((s) => {
+      // @ts-ignore
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach((a) => {
+      // @ts-ignore
+      a.style.color = a.getAttribute("href") === `#${current}` ? "var(--white)" : "var(--muted)";
+    });
+  });
+</script>

@@ -1,0 +1,59 @@
+---
+
+---
+
+<style>
+  footer {
+    padding: 1.5rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .footer-links a:hover {
+    color: var(--white);
+  }
+
+  @media (max-width: 768px) {
+    footer {
+      padding: 2rem 1.5rem; /* Padding lebih kecil untuk mobile */
+      flex-direction: column-reverse; /* Link di atas, copyright di bawah */
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-links {
+      justify-content: center; /* Pusatkan link sosial */
+      gap: 2rem; /* Jarak antar link sedikit lebih lebar agar mudah diklik jari */
+    }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      opacity: 0.7;
+    }
+  }
+</style>
+
+<footer>
+  <span class="footer-copy">© 2025 Your Name. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="https://github.com" target="_blank">GitHub</a>
+    <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+    <a href="https://dribbble.com" target="_blank">Dribbble</a>
+  </div>
+</footer>

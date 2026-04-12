@@ -1,0 +1,103 @@
+---
+
+---
+
+<style>
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 0; /* Sedikit lebih tebal agar teks bernapas */
+    background: var(--accent);
+    width: 100%;
+  }
+
+  .ticker {
+    display: flex;
+    gap: 4rem; /* Jarak antar item lebih lebar */
+    animation: ticker 30s linear infinite; /* Durasi lebih lama agar tidak pusing */
+    white-space: nowrap;
+    width: max-content;
+  }
+
+  .ticker-item {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--black);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .ticker-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--black);
+    border-radius: 50%;
+  }
+
+  /* Animasi Ticker */
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Geser setengah panjang container */
+  }
+
+  /* ===================== RESPONSIVE TICKER ===================== */
+  @media (max-width: 768px) {
+    .ticker-wrap {
+      padding: 0.8rem 0; /* Lebih tipis di mobile */
+    }
+    
+    .ticker {
+      gap: 2.5rem; /* Jarak antar item lebih rapat */
+      animation-duration: 20s; /* Lebih cepat sedikit karena jarak tempuh lebih pendek */
+    }
+
+    .ticker-item {
+      font-size: 0.7rem; /* Font lebih kecil agar tidak memenuhi layar */
+      gap: 1rem;
+    }
+
+    .ticker-dot {
+      width: 4px;
+      height: 4px;
+    }
+  }
+
+  /* Mematikan animasi jika user mengatur "Reduce Motion" di HP mereka (Good for Accessibility) */
+  @media (prefers-reduced-motion: reduce) {
+    .ticker {
+      animation: none;
+      overflow-x: auto;
+      white-space: normal;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>
+
+   <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker">
+      <!-- Duplicated for infinite loop -->
+      <span class="ticker-item">Astro. Js <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Next.js <span class="ticker-dot"></span></span>
+      <span class="ticker-item">TypeScript <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Tailwind CSS <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Node.js <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Figma <span class="ticker-dot"></span></span>
+      <span class="ticker-item">PostgreSQL <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Git <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Astro. Js <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Next.js <span class="ticker-dot"></span></span>
+      <span class="ticker-item">TypeScript <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Tailwind CSS <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Node.js <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Figma <span class="ticker-dot"></span></span>
+      <span class="ticker-item">PostgreSQL <span class="ticker-dot"></span></span>
+      <span class="ticker-item">Git <span class="ticker-dot"></span></span>
+    </div>
+  </div>

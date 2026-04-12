@@ -1,5 +1,13 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+"include": [
+    "src/**/*.d.ts",      // Ini akan membaca env.d.ts yang baru dibuat
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.astro",
+    ".astro/types.d.ts"   // Penting untuk sinkronisasi Astro
+  ],  "exclude": ["dist"],
+  "compilerOptions": {
+    "types": ["@sanity/astro/module"]
+  }
 }

@@ -1,0 +1,264 @@
+---
+import { sanityClient } from "sanity:client";
+
+const RESUME_QUERY = `*[_type == "cv"][0] {
+  "resumeUrl": resume.asset->url
+}`;
+
+const data = await sanityClient.fetch(RESUME_QUERY);
+const resumeUrl = data?.resumeUrl;
+---
+
+<style>
+  .section {
+    padding: 5rem 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+  .section-title {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .section-num {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-heading {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+  .about-heading .highlight {
+    color: var(--accent);
+  }
+
+  .about-body {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 2rem;
+  }
+
+  .about-socials {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .social-link {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .social-link:hover {
+    color: var(--white);
+    border-color: var(--white);
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    border: 1px solid var(--border);
+  }
+  .skill-box {
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+  }
+  .skill-box-title {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .skill-box-items {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+  @media (max-width: 1024px) {
+    .section {
+      padding: 5rem 2.5rem;
+    }
+    .about-grid {
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 4rem 1.5rem;
+      margin-left: 0.5rem !important; /* Kurangi margin luar di mobile */
+      margin-right: 0.5rem !important;
+    }
+
+    .about-grid {
+      grid-template-columns: 1fr; /* Tumpuk kiri dan kanan menjadi vertikal */
+      gap: 3.5rem;
+    }
+
+    .about-heading {
+      font-size: 3rem; /* Font lebih kecil agar tidak overflow */
+      line-height: 1.1;
+    }
+
+    .about-body {
+      font-size: 0.8rem;
+      line-height: 1.7;
+    }
+
+    .about-socials {
+      gap: 0.75rem;
+    }
+
+    .social-link {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.65rem;
+    }
+
+    .skills-grid {
+      /* Opsional: tetap 2 kolom di HP atau jadi 1 kolom */
+      /* Jika ingin 1 kolom saja, ubah menjadi grid-template-columns: 1fr; */
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .skill-box {
+      padding: 1.25rem;
+    }
+
+    .skill-box-items {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .skills-grid {
+      grid-template-columns: 1fr; /* Di HP sangat kecil, buat jadi 1 kolom saja */
+    }
+
+    .about-heading {
+      font-size: 2.5rem;
+    }
+  }
+</style>
+
+<section
+  class="section"
+  id="about"
+  style="border-top: 1px solid var(--border); margin-left: 1rem; margin-right: 1rem;"
+>
+  <div class="section-header">
+    <span class="section-title">About Me</span>
+    <span class="section-num">(02)</span>
+  </div>
+  <div class="about-grid">
+    <div>
+      <h2 class="about-heading">
+        Code<br />meets <span class="highlight">craft.</span>
+      </h2>
+      <p class="about-body">
+        I'm a frontend developer based in Jepara, Indonesia. I love turning
+        complex ideas into smooth, high-performance web interfaces. I care
+        deeply about the details — animation timing, spacing, and code that
+        actually scales.
+      </p>
+      <div class="about-socials">
+        <a
+          href="https://github.com/SenaAuliya"
+          target="_blank"
+          class="social-link">GitHub ↗</a
+        >
+        <a
+          href="https://www.linkedin.com/in/sena-auliya-01b85a402"
+          target="_blank"
+          class="social-link">LinkedIn ↗</a
+        >
+        <a
+          href="https://dribbble.com/sena-auliya"
+          target="_blank"
+          class="social-link">Dribbble ↗</a
+        >
+        <a
+          href={`${resumeUrl}?dl=CV_Sena_Auliya.pdf`}
+          class="social-link"
+          target="_blank"
+        >
+          Download CV ⬇
+        </a>
+      </div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-box">
+        <div class="skill-box-title">Frontend</div>
+        <div class="skill-box-items">Astro<br />Next.js<br />TypeScript</div>
+      </div>
+      <div class="skill-box">
+        <div class="skill-box-title">Styling</div>
+        <div class="skill-box-items">Tailwind<br />SCSS<br />Framer</div>
+      </div>
+      <div class="skill-box">
+        <div class="skill-box-title">Backend</div>
+        <div class="skill-box-items">Node.js<br />Express<br />Golang</div>
+      </div>
+      <div class="skill-box">
+        <div class="skill-box-title">Tools</div>
+        <div class="skill-box-items">Figma<br />Git<br />Netlify</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ============================================================
+  // SCROLL REVEAL
+  // ============================================================
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = "1";
+          e.target.style.transform = "translateY(0)";
+        }
+      });
+    },
+    { threshold: 0.1 },
+  );
+
+  document
+    .querySelectorAll(".skill-box, .about-heading, .about-body")
+    .forEach((el) => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(20px)";
+      el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+      revealObserver.observe(el);
+    });
+</script>
