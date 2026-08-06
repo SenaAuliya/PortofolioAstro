@@ -1,0 +1,496 @@
+---
+import "../../style/global.css"
+import Layouts from "../../layouts/layouts.astro"
+import type { SanityDocument } from "@sanity/client";
+import { sanityClient } from "sanity:client";
+
+const BLOG_QUERY = `*[_type == "project"] | order(year desc) {
+  _id,
+  "name": title,       
+  "desc": description, 
+  "technologies": technologies[]->name,
+  year,                
+  publishedAt,
+  url
+}`;
+
+const project = await sanityClient.fetch<SanityDocument[]>(BLOG_QUERY);
+
+const itemsPerPage = 4;
+// Gunakan ini jika technologies di-fetch sebagai objek (technologies[]-> { name })
+const allTechs = [...new Set(project.flatMap(p => p.technologies || []))].sort();
+const allYears = [...new Set(project.map(p => p.year))].sort((a, b) => b - a);
+---
+
+<style>
+  .section {
+    padding: 5rem 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+  .section-title {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .section-num {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--border);
+  }
+
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-right: 0.25rem;
+  }
+  .filter-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .filter-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+    margin: 0 0.25rem;
+  }
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover {
+    border-color: var(--white);
+    color: var(--white);
+  }
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--white);
+  }
+
+  .project-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .project-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto auto;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: padding-left 0.25s;
+    position: relative;
+    overflow: hidden;
+    color: inherit;
+  }
+  .project-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.25s;
+  }
+  .project-item:hover::before {
+    transform: scaleY(1);
+  }
+  .project-item:hover {
+    padding-left: 1.5rem;
+  }
+  .project-item.hidden {
+    display: none;
+  }
+
+  .project-num {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .project-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .project-desc {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+  .project-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .project-year {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* ===================== PROJECTS FOOTER ===================== */
+  .projects-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+  }
+  .projects-count {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .projects-count span {
+    color: var(--white);
+    font-weight: 500;
+  }
+  .load-more-btn {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--border);
+    color: var(--white);
+    background: transparent;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .load-more-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .load-more-btn.hidden {
+    display: none;
+  }
+  .load-more-icon {
+    width: 16px;
+    height: 16px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  .no-results {
+    display: none;
+    padding: 3rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .no-results.visible {
+    display: block;
+  }
+
+  @media (max-width: 1024px) {
+    .section {
+      padding: 5rem 2.5rem;
+    }
+    .project-item {
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 4rem 1.5rem;
+    }
+
+    /* Mengubah grid menjadi satu kolom */
+    .project-item {
+      grid-template-columns: 40px 1fr; /* Angka urut kecil di samping nama */
+      gap: 1rem;
+      padding: 1.5rem 0;
+    }
+
+    .project-num {
+      grid-row: 1;
+    }
+
+    /* Memaksa elemen lain pindah ke bawah nama project */
+    .project-tags {
+      grid-column: 2;
+      margin-top: 0.5rem;
+    }
+
+    .project-year {
+      grid-column: 2;
+      justify-self: start; /* Rata kiri di bawah tags */
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+
+    .project-name {
+      font-size: 1.25rem;
+    }
+
+    /* Membuat filter bar bisa di-scroll secara horizontal jika terlalu panjang */
+    .filter-bar {
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 5px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Sembunyikan scrollbar di Firefox */
+    }
+
+    .filter-group::-webkit-scrollbar {
+      display: none; /* Sembunyikan scrollbar di Chrome/Safari */
+    }
+
+    .filter-btn {
+      flex: 0 0 auto; /* Tombol tidak menyusut */
+      font-size: 0.6rem;
+      padding: 0.25rem 0.6rem;
+    }
+
+    .projects-footer {
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+      text-align: center;
+    }
+
+    .load-more-btn {
+      width: 100%; /* Tombol lebar penuh di mobile agar mudah diklik */
+      justify-content: center;
+    }
+  }
+
+
+</style>
+<Layouts>
+<section class="section" id="work">
+  <div class="section-header">
+    <span class="section-title">Selected Work</span>
+    <span class="section-num" id="section-count">(07)</span>
+  </div>
+
+  <!-- FILTER BAR -->
+  <!--
+      Cara tambah filter tech baru:
+      Duplikat <button> di bawah, ganti data-filter & teksnya (huruf kecil, sesuai data-tags project)
+    -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  
+  <div class="filter-group">
+    <button class="filter-btn active" data-filter="all" data-type="tech">All</button>
+    {allTechs.map(t => (
+      <button class="filter-btn" data-filter={String(t).toLowerCase()} data-type="tech">
+        {t}
+      </button>
+    ))}
+  </div>
+
+  <div class="filter-divider"></div>
+
+  <div class="filter-group">
+    <button class="filter-btn active" data-filter="all" data-type="year">All Years</button>
+    {allYears.map(year => (
+      <button class="filter-btn" data-filter={year.toString()} data-type="year">
+        {year}
+      </button>
+    ))}
+  </div>
+</div>
+
+<div class="project-list" id="project-list">
+  {project.map((item, index) => (
+    <a
+      class="project-item"
+      href={item.url || "#"} 
+      target="_blank"
+      data-tags={item.technologies ? item.technologies.join(',').toLowerCase() : ""} 
+      data-year={item.year.toString()}
+    >
+      <span class="project-num">{String(index + 1).padStart(2, '0')}</span>
+      <div>
+        <div class="project-name">{item.name}</div>
+        <div class="project-desc">{item.desc}</div>
+      </div>
+      <div class="project-tags">
+        {item.technologies?.map((tech) => (
+          <span class="tag">{tech}</span>
+        ))}
+      </div>
+      <span class="project-year">
+        {item.year}
+      </span>
+    </a>
+  ))}
+</div>
+
+  <div class="no-results" id="no-results">
+    No projects found for this filter.
+  </div>
+
+  <div class="projects-footer">
+    <p class="projects-count">
+      Showing <span id="showing-count">4</span> of <span id="total-count"
+        >7</span
+      > projects
+    </p>
+    <button class="load-more-btn" id="load-more-btn">
+      <span class="load-more-icon">+</span> Load More
+    </button>
+  </div>
+</section>
+</Layouts>
+
+
+<script>
+  // Deklarasikan ulang konstanta di dalam script karena script running di browser
+  const ITEMS_PER_PAGE = 4; 
+
+  // ============================================================
+  // STATE
+  // ============================================================
+  let activeTech = "all";
+  let activeYear = "all";
+  let visibleCount = ITEMS_PER_PAGE; // Gunakan konstanta yang baru dibuat
+
+  // Ambil semua elemen project
+  const allItems = Array.from(document.querySelectorAll(".project-item"));
+  const loadMoreBtn = document.getElementById("load-more-btn");
+  const showingEl = document.getElementById("showing-count");
+  const totalEl = document.getElementById("total-count");
+  const noResults = document.getElementById("no-results");
+  const sectionCount = document.getElementById("section-count");
+
+  // ============================================================
+  // CORE RENDER
+  // ============================================================
+  function getFiltered() {
+    return allItems.filter((item) => {
+      // Pastikan dataset ada, jika tidak ada beri string kosong agar tidak error
+      const tags = (item.dataset.tags || "").toLowerCase();
+      const year = item.dataset.year || "";
+      
+      const techOk = activeTech === "all" || tags.includes(activeTech);
+      const yearOk = activeYear === "all" || year === activeYear;
+      return techOk && yearOk;
+    });
+  }
+
+  function render() {
+    const filtered = getFiltered();
+    const total = filtered.length;
+
+    // Sembunyikan SEMUA item terlebih dahulu
+    allItems.forEach((el) => el.classList.add("hidden"));
+
+    // Tampilkan item yang terfilter sesuai batas visibleCount
+    filtered.slice(0, visibleCount).forEach((el, i) => {
+      el.classList.remove("hidden");
+      // Update nomor urut agar tetap 01, 02, dst meskipun difilter
+      const numEl = el.querySelector(".project-num");
+      if (numEl) numEl.textContent = String(i + 1).padStart(2, "0");
+    });
+
+    // Update angka statistik di footer
+    const showing = Math.min(visibleCount, total);
+    if (showingEl) showingEl.textContent = String(showing);
+    if (totalEl) totalEl.textContent = String(total);
+    if (sectionCount) sectionCount.textContent = `(${String(total).padStart(2, "0")})`;
+
+    // Kontrol tombol Load More & Pesan Kosong
+    if (loadMoreBtn) {
+      loadMoreBtn.classList.toggle("hidden", showing >= total || total === 0);
+    }
+    if (noResults) {
+      noResults.classList.toggle("visible", total === 0);
+    }
+  }
+
+  // ============================================================
+  // FILTER BUTTONS
+  // ============================================================
+  document.querySelectorAll(".filter-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const type = btn.getAttribute("data-type");
+      const filter = btn.getAttribute("data-filter");
+
+      // Reset class active pada grup yang sama
+      document
+        .querySelectorAll(`.filter-btn[data-type="${type}"]`)
+        .forEach((b) => b.classList.remove("active"));
+      
+      btn.classList.add("active");
+
+      // Update State
+      if (type === "tech") activeTech = filter.toLowerCase();
+      if (type === "year") activeYear = filter;
+
+      // Reset jumlah tampilan ke awal setiap kali filter berubah
+      visibleCount = ITEMS_PER_PAGE;
+      render();
+    });
+  });
+
+  // ============================================================
+  // LOAD MORE
+  // ============================================================
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", () => {
+      visibleCount += ITEMS_PER_PAGE;
+      render();
+    });
+  }
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  render();
+</script>
